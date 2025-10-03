@@ -28,7 +28,30 @@ func routes() http.Handler {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	// w.Write([]byte("Login Endpoint"))
+	var tools toolkit.Tools
+	var payload struct {
+		Email    string `json:"username"`
+		Password string `json:"password"`
+	}
+
+	err := tools.ReadJSON(w, r, &payload)
+	if err != nil {
+		tools.ErrorJSON(w, err)
+		return
+	}
+
+	var respPayload toolkit.JSONResponse
+
+	if payload.Email == "me@here.com" && payload.Password == "verysecret" {
+		respPayload.Error = false
+		respPayload.Message = "You have been logged in"
+		_ = tools.WriteJSON(w, http.StatusAccepted, respPayload)
+		return
+	}
+
+	respPayload.Error = true
+	respPayload.Message = "Invalid credentials"
+	_ = tools.WriteJSON(w, http.StatusUnauthorized, respPayload)
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
