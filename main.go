@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"github.com/Go-Golang-Training/toolkit/v2"
 )
 
 func main() {
@@ -28,5 +30,11 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 func logout(w http.ResponseWriter, r *http.Request) {
-	// w.Write([]byte("Logout Endpoint"))
+	var tools toolkit.Tools
+
+	payload := toolkit.JSONResponse{
+		Message: "You have been logged out",
+	}
+
+	_ = tools.WriteJSON(w, http.StatusAccepted, payload)
 }
