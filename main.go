@@ -19,6 +19,8 @@ func main() {
 
 func routes() http.Handler {
 	mux := http.NewServeMux()
+
+	mux.Handle("/", http.StripPrefix("/", http.FileServer(http.Dir("."))))
 	mux.HandleFunc("/api/login", login)
 	mux.HandleFunc("/api/logout", logout)
 
